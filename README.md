@@ -46,10 +46,8 @@ If called with no arguments the lights will silently turn off.
 For example commands see the preset list.
 See 'man alienfx' for more information.
 
-# Supported models:  Now, before you complain about it not turning your kit
-into a flashing disco pad, respect the fact many revisions of the AlienWare
-light chip have been made.   Generally, the 'lsusb' command will reveal the
-product-ID of your chip.
+# Supported models:
+Now, before you complain about it not turning your kit into a flashing disco pad, respect the fact many revisions of the AlienWare light chip have been made.   Generally, the 'lsusb' command will reveal the product-ID of your chip.
 
 Currently, the follow models are known and programmed for:
       Model                  Vendor:Product
