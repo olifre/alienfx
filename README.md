@@ -50,14 +50,16 @@ See 'man alienfx' for more information.
 Now, before you complain about it not turning your kit into a flashing disco pad, respect the fact many revisions of the AlienWare light chip have been made.   Generally, the 'lsusb' command will reveal the product-ID of your chip.
 
 Currently, the follow models are known and programmed for:
-      Model                  Vendor:Product
-	M11X                   187c:0514
-	M11X R3                187c:0522	
-	M14X R2
-	M15X                   187c:0512
-	M17X                   187c:0512
-	Aurora (non-ALX)       187c:0513
-	Area51                 187c:0511
+
+|Model           |Vendor:Product|
+|:-------------- | ------------:|
+|M11X            |     187c:0514|
+|M11X R3         |     187c:0522|	
+|M14X R2         |              |
+|M15X            |     187c:0512|
+|M17X            |     187c:0512|
+|Aurora (non-ALX)|     187c:0513|
+|Area51          |     187c:0511|
 
 If your USB device is not listed, please output the result of the 
 'lsusb -v' (run it as root) and mail it to <simon@tibble.net> and I
