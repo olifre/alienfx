@@ -55,7 +55,7 @@ Currently, the follow models are known and programmed for:
 |:-------------- | ------------:|
 |M11X            |     187c:0514|
 |M11X R3         |     187c:0522|	
-|M14X R2         |              |
+|M14X R2         |     187c:0521|
 |M15X            |     187c:0512|
 |M17X            |     187c:0512|
 |Aurora (non-ALX)|     187c:0513|
