@@ -1,5 +1,15 @@
 # Alienware AlienFX Light Manipulation Program in GNU C++ for Linux
-Building source code requires libusb-1.0 headers.
+
+## Preface
+I found original program very usefull on my Alienfware M14x R2 after
+I managed to get it working. The repository of the original program
+appears to be unmaintaind for the last couple of years, so I created
+a fork. I'm not planning to actively work on further improvements but
+I do promise to react to issues posted to the tracker. Also feel free
+to send me pull requests.
+
+##Building/installing
+Building the source code requires libusb-1.0 headers.
 If you are missing them on Debian, issue command:
   apt-get install libusb-1.0-0-dev
 
@@ -62,9 +72,8 @@ Currently, the follow models are known and programmed for:
 |Area51          |     187c:0511|
 
 If your USB device is not listed, please output the result of the 
-'lsusb -v' (run it as root) and mail it to <simon@tibble.net> and I
-will do my best to work with you by email to get the program working
-on your equipment.
+'lsusb -v' (run it as root) and create an issue here. I will do my best
+to work with you to get the program working on your equipment.
 
 I have built this on 64-bit hardware, though I include a 32-bit binary for
 completeness - and this is untested!  64-bit is known working.
