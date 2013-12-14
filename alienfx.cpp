@@ -13,6 +13,7 @@
 #include <string.h>
 #include <iostream>
 #include <libusb-1.0/libusb.h>
+#include <unistd.h>
 
 using namespace std;
 
