@@ -1,12 +1,15 @@
 # Alienware AlienFX Light Manipulation Program in GNU C++ for Linux
 
 ## Preface
-I found original program very usefull on my Alienfware M14x R2 after
-I managed to get it working. The repository of the original program
-appears to be unmaintaind for the last couple of years, so I created
-a fork. I'm not planning to actively work on further improvements but
-I do promise to react to issues posted to the tracker. Also feel free
-to send me pull requests.
+The two older repositories for this tool seemed mostly unmaintained, 
+I will try to perform some changes here as soon as my first 
+Alienware laptop arrived. 
+### Planned TODO
+- switch to cmake
+- clean up some of the shell-scripts
+- add support for Alienware 17
+I also do promise to react to issues posted to the tracker. 
+Also feel free to send me pull requests. 
 
 ##Building/installing
 Building the source code requires libusb-1.0 headers.
