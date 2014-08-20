@@ -5,29 +5,16 @@ The two older repositories for this tool seemed mostly unmaintained,
 I will try to perform some changes here as soon as my first 
 Alienware laptop arrived. 
 ### Planned TODO
-- switch to cmake
 - clean up some of the shell-scripts
 - add support for Alienware 17
 I also do promise to react to issues posted to the tracker. 
 Also feel free to send me pull requests. 
 
-##Building/installing
-Building the source code requires libusb-1.0 headers.
-If you are missing them on Debian, issue command:
-  apt-get install libusb-1.0-0-dev
+# BIG FAT WARNING
+My alienware is not there yet. 
+I am currently playing with the codebase without testing the code. 
+You are on your own if anything goes wrong!!! 
 
-To build source:
-  cd alienfx/
-  make build
-
-To install to userland:
-  sudo make install
-
-To make a Debian package (i386 or amd64):
-  make deb
-
-To make source tarball:
-  make tarball
 ## Alienware AlienFX Light Manipulation Program v1.0
 ```
 Usage:    alienfx [options]
