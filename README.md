@@ -3,18 +3,23 @@
 ## Preface
 The two older repositories for this tool seemed mostly unmaintained, 
 I will try to perform some changes here as soon as my first 
-Alienware laptop arrived. 
-### Planned TODO
-- clean up some of the shell-scripts
-- add support for Alienware 17
-I also do promise to react to issues posted to the tracker. 
-Also feel free to send me pull requests. 
+Alienware laptop arrived.
 
 # BIG FAT WARNING
 My alienware is not there yet. 
 I am currently playing with the codebase without testing the code. 
 You are on your own if anything goes wrong!!! 
 
+### Planned TODO
+- add support for Alienware 17
+- rewrite everything in a more object-oriented way (library + commandline-tool).
+- use more C++ style syntax and less C.
+Note: The new version explicitly requires C++11. 
+I also do promise to react to issues posted to the tracker. 
+Also feel free to send me pull requests. 
+
+
+# Outdated Section
 ## Alienware AlienFX Light Manipulation Program v1.0
 ```
 Usage:    alienfx [options]
