@@ -15,8 +15,6 @@
 #include <libusb-1.0/libusb.h>
 #include <unistd.h>
 
-using namespace std;
-
 //Include the zone presets & useful consts
 #include "presets.h"
 #include "consts.h"
