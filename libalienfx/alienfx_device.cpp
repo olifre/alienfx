@@ -120,7 +120,7 @@ int alienFx::cAlienfx_device::ReadDevice(unsigned char* pData, int pDataLength) 
 	return v;
 }
 
-int alienFx::cAlienfx_device::WriteDevice(const unsigned char* pData, int pDataLength) {
+int alienFx::cAlienfx_device::WriteDevice(unsigned char* pData, int pDataLength) {
 	if (lVerbosity > 1) {
 		std::cout << "Debug: USB Write" << std::endl;
 		for (int i=0; i<pDataLength; i++) {
@@ -140,29 +140,37 @@ int alienFx::cAlienfx_device::WriteDevice(const unsigned char* pData, int pDataL
 	return v;
 }
 
+void alienFx::cAlienfx_device::SendCommand(unsigned char cmd, unsigned char idx, unsigned char zone, unsigned char r1, unsigned char g1,
+                                           unsigned char b1, unsigned char r2, unsigned char g2, unsigned char b2, bool chkReady) {
+	static unsigned char cmdBuf[alienFx::DATA_LENGTH];
+	memset(cmdBuf, alienFx::FILL_BYTE, alienFx::DATA_LENGTH);
+	cmdBuf[0] = lDevice->START_BYTE;
+	cmdBuf[1] = cmd;
+	WriteDevice(cmdBuf, alienFx::DATA_LENGTH);
+}
+
+unsigned char alienFx::cAlienfx_device::GetStatus() {
+	static unsigned char replyBuf[alienFx::DATA_LENGTH];
+	memset(replyBuf, alienFx::FILL_BYTE, alienFx::DATA_LENGTH);
+	ReadDevice(replyBuf, alienFx::DATA_LENGTH);
+	return replyBuf[0];
+}
+
 bool alienFx::cAlienfx_device::CheckReady() {
 	bool ready = false;
 	unsigned int crashcheck = 0;
-	unsigned char thedata[alienFx::DATA_LENGTH];
-	memset(thedata, alienFx::FILL_BYTE, alienFx::DATA_LENGTH);
-	thedata[0] = lDevice->START_BYTE;
-	thedata[1] = alienFx_commands::GET_STATUS;
-	unsigned char check[alienFx::DATA_LENGTH];
-	memset(check, alienFx::FILL_BYTE, alienFx::DATA_LENGTH);
 	while (!ready) {
-		//memcpy(check, thedata, alienFx::DATA_LENGTH);
-		WriteDevice(thedata,  alienFx::DATA_LENGTH);
-		ReadDevice(check, alienFx::DATA_LENGTH);
-		//ready = memcmp(check, thedata, DATA_LENGTH);
-		ready = thedata[0] == alienFx_states::READY;
+		SendCommand(alienFx_commands::GET_STATUS);
+		unsigned char status = GetStatus();
+		ready = (status == alienFx_states::READY);
 		if (lVerbosity > 1) {
 			if (ready) {
 				std::cout << "Debug: Lightchip now ready." << std::endl;
 			}
-			if (thedata[0] == alienFx_states::BUSY) {
+			if (status == alienFx_states::BUSY) {
 				std::cout << "Debug: Lightchip is busy." << std::endl;
 			}
-			if (thedata[0] == alienFx_states::UNKNOWN_COMMAND) {
+			if (status == alienFx_states::UNKNOWN_COMMAND) {
 				std::cout << "Debug: Lightchip claims 'unknown command'." << std::endl;
 			}
 		}
