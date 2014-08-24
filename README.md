@@ -1,5 +1,5 @@
 # Alienware AlienFX Light Manipulation Program in GNU C++ for Linux
-
+[![Build Status](https://travis-ci.org/olifre/alienfx.svg?branch=master)](https://travis-ci.org/olifre/alienfx)
 ## Preface
 The two older repositories for this tool seemed mostly unmaintained, 
 I will try to perform some changes here as soon as my first 
