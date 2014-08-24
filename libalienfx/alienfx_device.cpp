@@ -120,7 +120,7 @@ int alienFx::cAlienfx_device::ReadDevice(unsigned char* pData, int pDataLength) 
 	return v;
 }
 
-int alienFx::cAlienfx_device::WriteDevice(unsigned char* pData, int pDataLength) {
+int alienFx::cAlienfx_device::WriteDevice(const unsigned char* pData, int pDataLength) {
 	if (lVerbosity > 1) {
 		std::cout << "Debug: USB Write" << std::endl;
 		for (int i=0; i<pDataLength; i++) {
@@ -137,8 +137,6 @@ int alienFx::cAlienfx_device::WriteDevice(unsigned char* pData, int pDataLength)
 	
 	usleep(lUsbSleep);
 	
-	memset(pData,0,pDataLength);
-	ReadDevice(pData,pDataLength);
 	return v;
 }
 
@@ -146,14 +144,17 @@ bool alienFx::cAlienfx_device::CheckReady() {
 	bool ready = false;
 	unsigned int crashcheck = 0;
 	unsigned char thedata[alienFx::DATA_LENGTH];
+	memset(thedata, alienFx::FILL_BYTE, alienFx::DATA_LENGTH);
+	thedata[0] = lDevice->START_BYTE;
+	thedata[1] = alienFx_commands::GET_STATUS;
 	unsigned char check[alienFx::DATA_LENGTH];
+	memset(check, alienFx::FILL_BYTE, alienFx::DATA_LENGTH);
 	while (!ready) {
-		memset(thedata, alienFx::FILL_BYTE, alienFx::DATA_LENGTH);
-		thedata[0] = lDevice->START_BYTE;
-		thedata[1] = alienFx_commands::GET_STATUS;
-		memcpy(check, thedata, alienFx::DATA_LENGTH);
+		//memcpy(check, thedata, alienFx::DATA_LENGTH);
 		WriteDevice(thedata,  alienFx::DATA_LENGTH);
-		ready = memcmp(check, thedata, DATA_LENGTH);
+		ReadDevice(check, alienFx::DATA_LENGTH);
+		//ready = memcmp(check, thedata, DATA_LENGTH);
+		ready = thedata[0] == alienFx_states::READY;
 		if (lVerbosity > 1) {
 			if (ready) {
 				std::cout << "Debug: Lightchip now ready." << std::endl;
