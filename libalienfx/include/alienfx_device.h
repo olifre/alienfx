@@ -33,8 +33,8 @@ namespace alienFx {
 		int ReadDevice(unsigned char* pData, int pDataLength);
 		int WriteDevice(unsigned char* pData, int pDataLength);
 
-		void SendCommand(unsigned char cmd, unsigned char idx=0x00, unsigned char zone=0x00, unsigned char r1=0x00, unsigned char g1=0x00,
-		                 unsigned char b1=0x00, unsigned char r2=0x00, unsigned char g2=0x00, unsigned char b2=0x00, bool chkReady=false);
+		void SendCommand(unsigned char cmd, unsigned char block=0x00, unsigned char data1=0x00, unsigned char data2=0x00, unsigned char data3=0x00,
+		                 unsigned char data4=0x00, unsigned char data5=0x00, unsigned char data6=0x00);
 		unsigned char GetStatus();
 
 		void afx_set(unsigned char cmd, unsigned char idx, unsigned char zone, unsigned char r1, unsigned char g1,

@@ -140,12 +140,19 @@ int alienFx::cAlienfx_device::WriteDevice(unsigned char* pData, int pDataLength)
 	return v;
 }
 
-void alienFx::cAlienfx_device::SendCommand(unsigned char cmd, unsigned char idx, unsigned char zone, unsigned char r1, unsigned char g1,
-                                           unsigned char b1, unsigned char r2, unsigned char g2, unsigned char b2, bool chkReady) {
+void alienFx::cAlienfx_device::SendCommand(unsigned char cmd, unsigned char block, unsigned char data1, unsigned char data2, unsigned char data3,
+                                           unsigned char data4, unsigned char data5, unsigned char data6) {
 	static unsigned char cmdBuf[alienFx::DATA_LENGTH];
 	memset(cmdBuf, alienFx::FILL_BYTE, alienFx::DATA_LENGTH);
 	cmdBuf[0] = lDevice->START_BYTE;
 	cmdBuf[1] = cmd;
+	cmdBuf[2] = block;
+	cmdBuf[3] = data1;
+	cmdBuf[4] = data2;
+	cmdBuf[5] = data3;
+	cmdBuf[6] = data4;
+	cmdBuf[7] = data5;
+	cmdBuf[8] = data6;
 	WriteDevice(cmdBuf, alienFx::DATA_LENGTH);
 }
 
