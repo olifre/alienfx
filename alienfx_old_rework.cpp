@@ -1,20 +1,3 @@
-/*
-
-  ** AlienFX Light Control Program **
-  -- Controls the accessory lights for AlienWare M11X R3 --
-
-  Requires libusb-1.0 headers to build, and the libusb-1.0.so library to execute.
-
-*/
-
-#include <stdio.h>
-#include <cstdlib>
-#include <string>
-#include <string.h>
-#include <iostream>
-#include <libusb-1.0/libusb.h>
-#include <unistd.h>
-
 //Include the zone presets & useful consts
 #include "presets.h"
 #include "consts.h"
@@ -151,27 +134,6 @@ bool parse_arguments(int argc, char *argv[], char **envp) {
 	return true;
 }
 
-void afx_cmd(unsigned char cmd, unsigned char block, unsigned char data1, unsigned char data2, unsigned char data3,
-		unsigned char data4, unsigned char data5, unsigned char data6) {
-	unsigned char thedata[DATA_LENGTH];
-	memset(thedata, FILL_BYTE, DATA_LENGTH);
-	thedata[0] = START_BYTE;
-	thedata[1] = cmd;
-	thedata[2] = block;
-	thedata[3] = data1;
-	thedata[4] = data2;
-	thedata[5] = data3;
-	thedata[6] = data4;
-	thedata[7] = data5;
-	thedata[8] = data6;
-	WriteDevice(thedata, DATA_LENGTH);
-}
-
-int afx_get() {
-  unsigned char thedata[DATA_LENGTH];
-  return ReadDevice(thedata, DATA_LENGTH);
-}
-
 void afx_set(unsigned char cmd, unsigned char idx, unsigned char zone, unsigned char r1, unsigned char g1,
 		unsigned char b1, unsigned char r2, unsigned char g2, unsigned char b2, bool chk) {
 	r1*=16;	g1*=16;	b1*=16;	r2*=16;	g2*=16;	b2*=16;
@@ -218,12 +180,6 @@ void afx_set(unsigned char cmd, unsigned char idx, unsigned char zone, unsigned 
 	} else WriteDevice(thedata, DATA_LENGTH);
 }
 
-void afx_reset() {
-	if (debug) printf("Debug: Software reset\n");
-	afx_cmd(COMMAND_RESET,RESET_ALL_LIGHTS_OFF,0,0,0,0,0,0);
-	afx_cmd(COMMAND_TRANSMIT_EXECUTE,0,0,0,0,0,0,0);
-}
-
 void afx_spd(int speed) {
 //	speed = speed * 100;
 	if(speed > MAX_SPEED) speed = MAX_SPEED;
@@ -237,7 +193,7 @@ bool afx_raw(unsigned char cmd[DATA_LENGTH]) {
 	unsigned char chk[DATA_LENGTH];
 	memcpy(chk,cmd,DATA_LENGTH);
 	WriteDevice(cmd,DATA_LENGTH);
-//	usleep(DEFAULT_USB_SLEEP);
+	//	usleep(DEFAULT_USB_SLEEP);
 	if (memcmp(chk,cmd,DATA_LENGTH)) printf("AFX: OK\n"); else printf("AFX: ERR\n");
 }
 
