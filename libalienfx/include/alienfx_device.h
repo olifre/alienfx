@@ -36,6 +36,7 @@ namespace alienFx {
 		void SendCommand(unsigned char cmd, unsigned char block=0x00, unsigned char data1=0x00, unsigned char data2=0x00, unsigned char data3=0x00,
 		                 unsigned char data4=0x00, unsigned char data5=0x00, unsigned char data6=0x00);
 		unsigned char GetStatus();
+		void RebootChip();
 
 		void afx_set(unsigned char cmd, unsigned char idx, unsigned char zone, unsigned char r1, unsigned char g1,
 		             unsigned char b1, unsigned char r2, unsigned char g2, unsigned char b2, bool chk);

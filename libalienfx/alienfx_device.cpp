@@ -142,7 +142,7 @@ int alienFx::cAlienfx_device::WriteDevice(unsigned char* pData, int pDataLength)
 
 void alienFx::cAlienfx_device::SendCommand(unsigned char cmd, unsigned char block, unsigned char data1, unsigned char data2, unsigned char data3,
                                            unsigned char data4, unsigned char data5, unsigned char data6) {
-	static unsigned char cmdBuf[alienFx::DATA_LENGTH];
+	unsigned char cmdBuf[alienFx::DATA_LENGTH];
 	memset(cmdBuf, alienFx::FILL_BYTE, alienFx::DATA_LENGTH);
 	cmdBuf[0] = lDevice->START_BYTE;
 	cmdBuf[1] = cmd;
@@ -157,10 +157,23 @@ void alienFx::cAlienfx_device::SendCommand(unsigned char cmd, unsigned char bloc
 }
 
 unsigned char alienFx::cAlienfx_device::GetStatus() {
-	static unsigned char replyBuf[alienFx::DATA_LENGTH];
+	unsigned char replyBuf[alienFx::DATA_LENGTH];
 	memset(replyBuf, alienFx::FILL_BYTE, alienFx::DATA_LENGTH);
 	ReadDevice(replyBuf, alienFx::DATA_LENGTH);
 	return replyBuf[0];
+}
+
+void alienFx::cAlienfx_device::RebootChip() {
+	if (lVerbosity > 1) {
+		std::cout << "Debug: Reboot of lightchip requested." << std::endl;
+	}
+	SendCommand(alienFx_commands::REBOOT_CHIP);
+	UnInit();
+	sleep(3);
+	if (!Init()) {
+		std::cerr << "Error opening lightchip-device after reboot!" << std::endl;
+		exit(1);
+	}
 }
 
 bool alienFx::cAlienfx_device::CheckReady() {
