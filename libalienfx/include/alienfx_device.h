@@ -38,20 +38,10 @@ namespace alienFx {
 		void SendCommand(unsigned char cmd, unsigned char block=0x00, unsigned char data1=0x00, unsigned char data2=0x00, unsigned char data3=0x00,
 		                 unsigned char data4=0x00, unsigned char data5=0x00, unsigned char data6=0x00);
 		unsigned char GetStatus();
+		void SetSpeed(unsigned int speed);
 		void RebootChip();
 		void Reset(alienFx::alienFx_resetTypes resetType = alienFx::alienFx_resetTypes::ALL_LIGHTS_OFF);
-
-		void afx_set(unsigned char cmd, unsigned char idx, unsigned char zone, unsigned char r1, unsigned char g1,
-		             unsigned char b1, unsigned char r2, unsigned char g2, unsigned char b2, bool chk);
-		void afx_cmd(unsigned char cmd, unsigned char block, unsigned char data1, unsigned char data2, unsigned char data3,
-		             unsigned char data4, unsigned char data5, unsigned char data6);
-		int afx_get();
-		void afx_reset();
-		void afx_reboot();
-		void afx_spd(int speed);
-		//bool afx_raw(unsigned char cmd[DATA_LENGTH]);
-		bool afx_process(char *cmd);
-
+		
 		void UnInit();
 
 	public:

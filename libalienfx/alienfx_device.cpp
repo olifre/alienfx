@@ -163,6 +163,15 @@ unsigned char alienFx::cAlienfx_device::GetStatus() {
 	return replyBuf[0];
 }
 
+void alienFx::cAlienfx_device::SetSpeed(unsigned int speed) {
+	//FIXME Is this really limited? 
+	//	if(speed > MAX_SPEED) speed = MAX_SPEED;
+	//  if(speed < MIN_SPEED) speed = MIN_SPEED;
+	unsigned char b1 = (speed >> 8) & 0xFF;
+	unsigned char b2 = speed & 0xFF;
+	SendCommand(alienFx_commands::SET_SPEED, b1, b2, 0, 0, 0, 0, 0);
+}
+
 void alienFx::cAlienfx_device::RebootChip() {
 	if (lVerbosity > 1) {
 		std::cout << "Debug: Reboot of lightchip requested." << std::endl;
