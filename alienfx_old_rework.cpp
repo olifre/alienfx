@@ -224,17 +224,6 @@ void afx_reset() {
 	afx_cmd(COMMAND_TRANSMIT_EXECUTE,0,0,0,0,0,0,0);
 }
 
-void afx_reboot() {
-	if (debug) printf("Debug: Reboot of lightchip requested\n");
-	afx_cmd(COMMAND_REBOOT_CHIP,0,0,0,0,0,0,0);
-	AlienfxDeinit();
-	sleep(3);
-	if (!AlienfxInit()) {
-		if (debug) printf("Debug: Exiting\n");
-		exit(1);
-	}
-}
-
 void afx_spd(int speed) {
 //	speed = speed * 100;
 	if(speed > MAX_SPEED) speed = MAX_SPEED;

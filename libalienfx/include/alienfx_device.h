@@ -9,6 +9,8 @@
 #include <libusb-1.0/libusb.h>
 #include <unistd.h>
 
+#include "alienfx_public_constants.h"
+
 //Include the zone presets & useful consts
 //#include "presets.h"
 //#include "consts.h"
@@ -37,6 +39,7 @@ namespace alienFx {
 		                 unsigned char data4=0x00, unsigned char data5=0x00, unsigned char data6=0x00);
 		unsigned char GetStatus();
 		void RebootChip();
+		void Reset(alienFx::alienFx_resetTypes resetType = alienFx::alienFx_resetTypes::ALL_LIGHTS_OFF);
 
 		void afx_set(unsigned char cmd, unsigned char idx, unsigned char zone, unsigned char r1, unsigned char g1,
 		             unsigned char b1, unsigned char r2, unsigned char g2, unsigned char b2, bool chk);

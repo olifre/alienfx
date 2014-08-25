@@ -176,6 +176,14 @@ void alienFx::cAlienfx_device::RebootChip() {
 	}
 }
 
+void alienFx::cAlienfx_device::Reset(alienFx::alienFx_resetTypes resetType) {
+	if (lVerbosity > 1) {
+		std::cout << "Debug: Reset of type '" << resetType << "' requested." << std::endl;
+	}
+	SendCommand(alienFx_commands::RESET, resetType);
+	SendCommand(alienFx_commands::TRANSMIT_EXECUTE);
+}
+
 bool alienFx::cAlienfx_device::CheckReady() {
 	bool ready = false;
 	unsigned int crashcheck = 0;
