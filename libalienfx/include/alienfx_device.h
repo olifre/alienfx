@@ -39,7 +39,7 @@ namespace alienFx {
 		                 unsigned char data4=0x00, unsigned char data5=0x00, unsigned char data6=0x00);
 		unsigned char GetStatus();
 		void SetSpeed(unsigned int speed);
-		void SetColour(unsigned char cmd, unsigned char idx, unsigned char zoneMask,
+		void SetColour(unsigned char cmd, unsigned char idx, uint32_t zoneMask,
 		               unsigned char r1=0x00, unsigned char g1=0x00, unsigned char b1=0x00,
 		               unsigned char r2=0x00, unsigned char g2=0x00, unsigned char b2=0x00, bool checkReady=true);
 		void RebootChip();

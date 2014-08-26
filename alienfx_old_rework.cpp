@@ -134,61 +134,6 @@ bool parse_arguments(int argc, char *argv[], char **envp) {
 	return true;
 }
 
-void afx_set(unsigned char cmd, unsigned char idx, unsigned char zone, unsigned char r1, unsigned char g1,
-		unsigned char b1, unsigned char r2, unsigned char g2, unsigned char b2, bool chk) {
-	r1*=16;	g1*=16;	b1*=16;	r2*=16;	g2*=16;	b2*=16;
-	int RG = r1 & 0xF0; RG = RG | ((g1 >> 4) & 0x0F);
-	int BR = b1 & 0xF0; BR = BR | ((r2 >> 4) & 0x0F);
-	int GB = g2 & 0xF0; GB = GB | ((b2 >> 4) & 0x0F);
-	char z1, z2, z3, z4; bool zones[32];
-//FIXME: There must be a better way to bitwise the zone?
-	memset(zones,1,32);
-	if (zone>0) { memset(zones,0,32); zones[zone] = true; }
-	//z1 = ((idx>>4)&0xFF); //phantom zoning, applies to older chips?
-	z1 = (zones[0]<<7)+(zones[1]<<6)+(zones[2]<<5)+idx;
-	z2 = (zones[3]<<7)+(zones[4]<<6)+(zones[5]<<5)+(zones[6]<<4)+(zones[7]<<3)+(zones[8]<<2)+(zones[9]<<1)+zones[10];
-	z3 = (zones[11]<<7)+(zones[12]<<6)+(zones[13]<<5)+(zones[14]<<4)+(zones[15]<<3)+(zones[16]<<2)+(zones[17]<<1)+zones[18];
-	z4 = (zones[19]<<7)+(zones[20]<<6)+(zones[21]<<5)+(zones[22]<<4)+(zones[23]<<3)+(zones[24]<<2)+(zones[25]<<1)+zones[26];
-//	z1 = (zones[0]<<7)+(zones[1]<<6)+(zones[2]<<5)+(zones[3]<<4)+(zones[4]<<3)+(zones[5]<<2)+(zones[6]<<1)+zones[7];
-//	z2 = (zones[8]<<7)+(zones[9]<<6)+(zones[10]<<5)+(zones[11]<<4)+(zones[12]<<3)+(zones[13]<<2)+(zones[14]<<1)+zones[15];
-//	z3 = (zones[16]<<7)+(zones[17]<<6)+(zones[18]<<5)+(zones[19]<<4)+(zones[20]<<3)+(zones[21]<<2)+(zones[22]<<1)+zones[23];
-//	z4 = (zones[24]<<7)+(zones[25]<<6)+(zones[26]<<5)+(zones[27]<<4)+(zones[28]<<3)+(zones[29]<<2)+(zones[30]<<1)+zones[31];
-	if (debug) { //ugly but needed output
-		printf("Zones: 01 02 03 04 05 06 07 08 09 10 11 12 13 14\n");
-		printf("Zones:  %i  %i  %i  %i  %i  %i  %i  %i  %i  %i  %i  %i  %i  %i\n",
-		 zones[0], zones[1], zones[2], zones[3], zones[4], zones[5], zones[6], zones[7],
-		 zones[8], zones[9], zones[10], zones[11], zones[12], zones[13]);
-		printf("Zones: -----------------------------------------\n");
-		printf("Zones: 15 16 17 18 19 20 21 22 23 24 25 26 27\n");
-		printf("Zones:  %i  %i  %i  %i  %i  %i  %i  %i  %i  %i  %i  %i  %i\n",
-		 zones[14], zones[15], zones[16], zones[17], zones[18], zones[19], zones[20],
-		 zones[21], zones[22], zones[23], zones[24], zones[25], zones[26]);
-	}
-	unsigned char thedata[DATA_LENGTH];
-	memset(thedata, FILL_BYTE, DATA_LENGTH);
-	thedata[0] = START_BYTE;//Always 0x02?
-	thedata[1] = cmd;//Command
-	thedata[2] = z1; //3-bits ZONE and 5-bits INDEX?
-	thedata[3] = z2; //8-bits ZONE
-	thedata[4] = z3; //8-bits ZONE
-	thedata[5] = z4; //8-bits ZONE
-	thedata[6] = RG; //4-bits 1stRED, 4-bits 1stGREEN
-	thedata[7] = BR; //4-bits 1stBLUE, 4-bits 2ndRED
-	thedata[8] = GB; //4-bits 2ndGREEN, 4-bits 2ndBLUE
-	if (chk) {
-		if (usb_is_ready()) WriteDevice(thedata, DATA_LENGTH);
-	} else WriteDevice(thedata, DATA_LENGTH);
-}
-
-void afx_spd(int speed) {
-//	speed = speed * 100;
-	if(speed > MAX_SPEED) speed = MAX_SPEED;
-	if(speed < MIN_SPEED) speed = MIN_SPEED;
-	int b1 = (speed >> 8) & 0xFF;
-	int b2 = speed & 0xFF;
-	afx_cmd(COMMAND_SET_SPEED,b1,b2,0,0,0,0,0);
-}
-
 bool afx_raw(unsigned char cmd[DATA_LENGTH]) {
 	unsigned char chk[DATA_LENGTH];
 	memcpy(chk,cmd,DATA_LENGTH);

@@ -172,37 +172,19 @@ void alienFx::cAlienfx_device::SetSpeed(unsigned int speed) {
 	SendCommand(alienFx_commands::SET_SPEED, b1, b2, 0, 0, 0, 0, 0);
 }
 
-void alienFx::cAlienfx_device::SetColour(unsigned char cmd, unsigned char idx, unsigned char zoneMask,
+void alienFx::cAlienfx_device::SetColour(unsigned char cmd, unsigned char idx, uint32_t zoneMask,
                                          unsigned char r1, unsigned char g1, unsigned char b1,
                                          unsigned char r2, unsigned char g2, unsigned char b2, bool checkReady) {
-	union {
-		unsigned char buffer[alienFx::DATA_LENGTH];
-		struct {
-			unsigned char start;
-			unsigned char cmd;
-			unsigned char addr;
-			unsigned int zoneMask : 24;
-			unsigned char r1 : 4;
-			unsigned char g1 : 4;
-			unsigned char b1 : 4;
-			unsigned char r2 : 4;
-			unsigned char g2 : 4;
-			unsigned char b2 : 4;
-		} bytes;
-	} cmdBuf;
-	memset(cmdBuf.buffer, alienFx::FILL_BYTE, alienFx::DATA_LENGTH);
-
-	cmdBuf.bytes.r1 = r1;
-	cmdBuf.bytes.g1 = g1;
-	cmdBuf.bytes.b1 = b1;
-	cmdBuf.bytes.r2 = r2;
-	cmdBuf.bytes.g2 = g2;
-	cmdBuf.bytes.b2 = b2;
-	
-	cmdBuf.bytes.zoneMask = (zoneMask & 0xFFFFFF);
-	
 	if ((!checkReady) || CheckReady()) {
-		WriteDevice(cmdBuf.buffer, DATA_LENGTH);
+		SendCommand(cmd,
+		            idx,
+		            (zoneMask >> 16) & 0xFF,
+		            (zoneMask >>  8) & 0xFF,
+		            (zoneMask      ) & 0xFF,
+		            ((r1 & 0xF) << 4) | (g1 & 0xF),
+		            ((b1 & 0xF) << 4) | (r2 & 0xF),
+		            ((g2 & 0xF) << 4) | (b2 & 0xF)
+		            );
 	}
 }
 
