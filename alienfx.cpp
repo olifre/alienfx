@@ -3,6 +3,8 @@
 #include "libalienfx/include/alienfx_device.h"
 #include "libalienfx/include/alienfx_commands.h"
 
+#include "libalienfx/include/alienfx_cmdparser.h"
+
 void zoneScan(alienFx::cAlienfx_device& alienfx, int maxZone=32) {
 	for (int zone=0; zone<maxZone; zone++) {
 		std::cout << "*********************************" << std::endl;
@@ -24,12 +26,30 @@ int main() {
 		return 1;
 	}
 	std::cout << "Turning lights off..." << std::endl;
-	alienfx.Reset(alienFx::alienFx_resetTypes::ALL_LIGHTS_OFF);
+	//alienfx.Reset(alienFx::alienFx_resetTypes::ALL_LIGHTS_OFF);
 	//alienfx.RebootChip();
-	sleep(1);
+	//sleep(3);
 	std::cout << "Turning lights on..." << std::endl;
-	alienfx.Reset(alienFx::alienFx_resetTypes::ALL_LIGHTS_ON);
-	zoneScan(alienfx);
+	//alienfx.Reset(alienFx::alienFx_resetTypes::ALL_LIGHTS_ON);
+
+	//zoneScan(alienfx);
+
+	alienFx::cAlienfx_cmdparser alienfx_parser(&alienfx, 3);
+	//alienfx.SetSpeed(3000);
+	//alienfx_parser.ExecuteCommandString("Z06Z07Z09MF00FF0MFF00F0M0F00FFM0FF00FM00FF0FMF0FF00");
+	//alienfx_parser.ExecuteCommandString("Z00MF00FF0MFF00F0M0F00FFM0FF00FM00FF0FMF0FF00");
+	alienfx_parser.ExecuteCommandString("Z06Z07Z09F222F666");
+	//alienfx_parser.ExecuteCommandString("Z04Z06Z07Z08Z09Z10Z12Z14F111Z01Z02Z03Ffff");
+	//alienfx_parser.ExecuteCommandString("Z12B0F0");
+	//alienfx_parser.ExecuteCommandString("Z00BFFF");	
+
+	alienfx.SetSpeed(3);
+	sleep(3);
+	alienfx.SetSpeed(30);
+	sleep(3);
+	alienfx.SetSpeed(300);
+	sleep(3);
+
 	/*
 	alienfx.SetColour(alienFx::alienFx_commands::SET_COLOUR_FIXED, 0,
 	                  (1<<0) | (1<<1) | (1<<2) | (1<<3) | (1<<4),
@@ -45,7 +65,7 @@ int main() {
 	                  0xFFFFFFFF,
 	                  255, 0, 0);
 	*/
-	sleep(2);
+	//sleep(2);
 	alienfx.RebootChip();
 	return 0;
 }
