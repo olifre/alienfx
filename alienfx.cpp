@@ -3,6 +3,19 @@
 #include "libalienfx/include/alienfx_device.h"
 #include "libalienfx/include/alienfx_commands.h"
 
+void zoneScan(alienFx::cAlienfx_device& alienfx, int maxZone=32) {
+	for (int zone=0; zone<maxZone; zone++) {
+		std::cout << "*********************************" << std::endl;
+		std::cout << "Scanning zone " << zone << std::endl;
+		alienfx.SetColour(alienFx::alienFx_commands::SET_COLOUR_BLINK, 0,
+		                  (1<<zone),
+		                  255, 0, 0);
+		sleep(3);
+		alienfx.Reset(alienFx::alienFx_resetTypes::ALL_LIGHTS_OFF);
+		std::cout << "*********************************" << std::endl;
+	}
+}
+
 int main() {
 	alienFx::cAlienfx_device alienfx(3);
 	bool chipFound = alienfx.Init();
@@ -16,21 +29,12 @@ int main() {
 	sleep(1);
 	std::cout << "Turning lights on..." << std::endl;
 	alienfx.Reset(alienFx::alienFx_resetTypes::ALL_LIGHTS_ON);
+	zoneScan(alienfx);
 	/*
 	alienfx.SetColour(alienFx::alienFx_commands::SET_COLOUR_FIXED, 0,
 	                  (1<<0) | (1<<1) | (1<<2) | (1<<3) | (1<<4),
 	                  0, 0, 255);
 	*/
-	for (int zone=0; zone<32; zone++) {
-		std::cout << "*********************************" << std::endl;
-		std::cout << "Scanning zone " << zone << std::endl;
-		alienfx.SetColour(alienFx::alienFx_commands::SET_COLOUR_BLINK, 0,
-		                  (1<<zone),
-		                  255, 0, 0);
-		sleep(3);
-		alienfx.Reset(alienFx::alienFx_resetTypes::ALL_LIGHTS_OFF);
-		std::cout << "*********************************" << std::endl;
-	}
 	/*
 	alienfx.SetColour(alienFx::alienFx_commands::SET_COLOUR_FIXED, 0,
 	                  0xFFFFFFFF,

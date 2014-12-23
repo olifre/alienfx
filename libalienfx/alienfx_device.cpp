@@ -37,9 +37,11 @@ void alienFx::cAlienfx_device::UnInit() {
 		libusb_attach_kernel_driver(lAlienFx, 0);
 	  libusb_close(lAlienFx);
 	}
+	lAlienFx = NULL;
 	if (lUsbContext != NULL) {
 		libusb_exit(lUsbContext);
 	}
+	lUsbContext = NULL;
 }
 
 bool alienFx::cAlienfx_device::Init() {
