@@ -71,28 +71,34 @@ bool alienFx::cAlienfx_device::Init() {
 				if (res == 0) {
 					if (lVerbosity > 1) {
 						std::cout << "success!" << std::endl;
-						std::cout << "Claiming interface... " << std::endl;
 					}
-					res = libusb_claim_interface(lAlienFx, 0);
-					if (res == 0) {
-						if (lVerbosity > 1) {
-							std::cout << "success!" << std::endl;
-						}
-						if (lVerbosity > 0) {
-							std::cout << "Found " << lDevice->devName << ", using it." << std::endl;
-						}
-						break;
-					} else {
-						std::cerr << "Could not claim interface!" << std::endl;	
-						UnInit();
-						exit(1);
+				} else {
+					if (lVerbosity > 1) {
+						std::cout << "failure!" << std::endl;
 					}
 				}
-				if (res == LIBUSB_ERROR_NOT_FOUND) {
-					std::cerr << "Failed to get USB device! Are you running two instances of this tool?" << std::endl;
-					UnInit();
-					exit(1);
+			}
+			if (lVerbosity > 1) {
+				std::cout << "Claiming interface... " << std::endl;
+			}
+			res = libusb_claim_interface(lAlienFx, 0);
+			if (res == 0) {
+				if (lVerbosity > 1) {
+					std::cout << "success!" << std::endl;
 				}
+				if (lVerbosity > 0) {
+					std::cout << "Found " << lDevice->devName << ", using it." << std::endl;
+				}
+				break;
+			} else {
+				std::cerr << "Could not claim interface!" << std::endl;	
+				UnInit();
+				exit(1);
+			}
+			if (res == LIBUSB_ERROR_NOT_FOUND) {
+				std::cerr << "Failed to get USB device! Are you running two instances of this tool?" << std::endl;
+				UnInit();
+				exit(1);
 			}
 		}
 	}
@@ -164,7 +170,7 @@ unsigned char alienFx::cAlienfx_device::GetStatus() {
 }
 
 void alienFx::cAlienfx_device::SetSpeed(unsigned int speed) {
-	//FIXME Is this really limited? 
+	//FIXME Is this really limited??? 
 	//	if(speed > MAX_SPEED) speed = MAX_SPEED;
 	//  if(speed < MIN_SPEED) speed = MIN_SPEED;
 	unsigned char b1 = (speed >> 8) & 0xFF;
@@ -175,6 +181,7 @@ void alienFx::cAlienfx_device::SetSpeed(unsigned int speed) {
 void alienFx::cAlienfx_device::SetColour(unsigned char cmd, unsigned char idx, uint32_t zoneMask,
                                          unsigned char r1, unsigned char g1, unsigned char b1,
                                          unsigned char r2, unsigned char g2, unsigned char b2, bool checkReady) {
+	//TODO: Zone-bits also in index-byte??? Phantom zoneing??? 
 	if ((!checkReady) || CheckReady()) {
 		SendCommand(cmd,
 		            idx,
