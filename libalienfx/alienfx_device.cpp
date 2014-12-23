@@ -224,6 +224,20 @@ void alienFx::cAlienfx_device::RebootChip() {
 	}
 }
 
+void alienFx::cAlienfx_device::EndLoopBlock() {
+	if (lVerbosity > 1) {
+		std::cout << "Debug: Sending LOOP_BLOCK_END." << std::endl;
+	}	
+	SendCommand(alienFx_commands::LOOP_BLOCK_END);
+}
+
+void alienFx::cAlienfx_device::TransmitExecute() {
+	if (lVerbosity > 1) {
+		std::cout << "Debug: Sending TRANSMIT_EXECUTE." << std::endl;
+	}	
+	SendCommand(alienFx_commands::TRANSMIT_EXECUTE);
+}
+
 void alienFx::cAlienfx_device::Reset(alienFx::alienFx_resetTypes resetType) {
 	if (lVerbosity > 1) {
 		std::cout << "Debug: Reset of type '" << resetType << "' requested." << std::endl;
