@@ -24,9 +24,3 @@ namespace alienFx {
 };
 
 #endif /* __alienfx_devices_h__ */
-
-
-
-
-
-
