@@ -115,7 +115,12 @@ int alienFx::cAlienfx_device::ReadDevice(unsigned char* pData, int pDataLength) 
 	if (lVerbosity > 1) {
 		std::cout << "Debug: USB Read" << std::endl;
 		for (int i=0; i<pDataLength; i++) {
-			printf("[%i]", pData[i]);
+			printf("[%3i]", pData[i]);
+		}
+		printf("    ");
+		for (int i=0; i<pDataLength; i++) {
+			printf(" %x", (pData[i]>>4) & 0xF);
+			printf("%x ", (pData[i])    & 0xF);
 		}
 		std::cout << std::endl;
 	}
@@ -132,7 +137,12 @@ int alienFx::cAlienfx_device::WriteDevice(unsigned char* pData, int pDataLength)
 	if (lVerbosity > 1) {
 		std::cout << "Debug: USB Write" << std::endl;
 		for (int i=0; i<pDataLength; i++) {
-			printf("[%i]", pData[i]);
+			printf("[%3i]", pData[i]);
+		}
+		printf("    ");
+		for (int i=0; i<pDataLength; i++) {
+			printf(" %x", (pData[i]>>4) & 0xF);
+			printf("%x ", (pData[i])    & 0xF);
 		}
 		std::cout << std::endl;
 	}
@@ -183,7 +193,11 @@ void alienFx::cAlienfx_device::SetSpeed(unsigned int speed) {
 void alienFx::cAlienfx_device::SetColour(unsigned char cmd, unsigned char idx, uint32_t zoneMask,
                                          unsigned char r1, unsigned char g1, unsigned char b1,
                                          unsigned char r2, unsigned char g2, unsigned char b2, bool checkReady) {
-	//TODO: Zone-bits also in index-byte??? Phantom zoneing??? 
+	//TODO: Zone-bits also in index-byte??? Phantom zoneing???
+	// Special case: If zone is zero, apply to all zones. 
+	if (zoneMask == 0x00000000) {
+		zoneMask = 0xFFFFFFFF;
+	}
 	if ((!checkReady) || CheckReady()) {
 		SendCommand(cmd,
 		            idx,
@@ -215,7 +229,7 @@ void alienFx::cAlienfx_device::Reset(alienFx::alienFx_resetTypes resetType) {
 		std::cout << "Debug: Reset of type '" << resetType << "' requested." << std::endl;
 	}
 	SendCommand(alienFx_commands::RESET, resetType);
-	SendCommand(alienFx_commands::TRANSMIT_EXECUTE);
+	CheckReady();
 }
 
 bool alienFx::cAlienfx_device::CheckReady() {
