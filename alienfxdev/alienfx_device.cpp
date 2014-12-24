@@ -60,7 +60,7 @@ bool alienFx::cAlienfx_device::Init() {
 			std::cout << "not found." << std::endl;
 		}
 		if (lAlienFx != NULL) {
-			if (lVerbosity > 0) {
+			if (lVerbosity > 1) {
 				std::cout << " found!" << std::endl;
 			}
 			// Steal device: 
