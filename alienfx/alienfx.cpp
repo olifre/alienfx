@@ -1,4 +1,6 @@
 #include <iostream>
+#include <iomanip>
+#include <getopt.h>
 
 #include "libalienfx/include/alienfx_device.h"
 #include "libalienfx/include/alienfx_commands.h"
@@ -18,10 +20,67 @@ void zoneScan(alienFx::cAlienfx_device& alienfx, int maxZone=32) {
 	}
 }
 
+void printHelp(std::string& execName) {
+	std::cout << std::setw(20) << " " << " alienfx commandline utility" << std::setw(20) << " " << std::endl;
+	std::cout << " " << execName.c_str() << " [options]" << std::endl;
+	std::cout << std::setw(20) << "-h, --help" << "  " << "Show help." << std::endl;
+}
+
+namespace longParameters {
+	enum _longParameters {
+		NONE,
+		HELP
+	};
+}
+
 int main(int argc, char **argv) {
-	if (argc>1) {
-		printf("HELP");
-		return 0;
+	int rebootChip = false;
+	
+	unsigned int verbosity = 2;
+	{
+		// *********************
+		// * PARAMETER PARSING *
+		// *********************
+
+		// We assume we are running on an OS which is useful:
+		std::string execName(argv[0]);
+
+		char *endptr;
+
+		const struct option long_options[] = {
+			{"reboot",        no_argument,         &rebootChip, true},
+			{"help",          no_argument,         NULL,        longParameters::HELP},
+			{0,               0,                   0,           longParameters::NONE}
+		};
+		if (argc > 1) {
+			int opt = 0;
+			int option_index = 0;
+			while ((opt = getopt_long(argc, argv, "hqv", long_options, &option_index)) != -1) {
+				switch (opt) {
+				case 0:
+					// long option which sets a var, getopt_long does this by itself.
+					break;
+				case 'h':
+				case longParameters::HELP:
+					printHelp(execName);
+					exit(0);
+				case 'q':
+					if (verbosity != 0) {
+						verbosity--;
+					}
+					break;
+				case 'v':
+					verbosity++;
+					break;
+				default:
+					printHelp(execName);
+					exit(1);
+				}
+			}
+		} else {
+			printHelp(execName);
+			exit(0);			
+		}
 	}
 	alienFx::cAlienfx_device alienfx(3);
 	bool chipFound = alienfx.Init();
