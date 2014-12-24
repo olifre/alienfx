@@ -2,10 +2,10 @@
 #include <iomanip>
 #include <getopt.h>
 
-#include "libalienfx/include/alienfx_device.h"
-#include "libalienfx/include/alienfx_commands.h"
+#include "alienfxdev/include/alienfx_device.h"
+#include "alienfxdev/include/alienfx_commands.h"
 
-#include "libalienfx/include/alienfx_cmdparser.h"
+#include "alienfxdev/include/alienfx_cmdparser.h"
 
 void zoneScan(alienFx::cAlienfx_device& alienfx, int maxZone=32) {
 	for (int zone=0; zone<maxZone; zone++) {
