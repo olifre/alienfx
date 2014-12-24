@@ -27,7 +27,12 @@ install:
 
 before_script:
   - mkdir build
+  - mkdir install
   - cd build
-  - cmake ..
+  - cmake -DCMAKE_INSTALL_PREFIX:PATH=../install ..
 
-script: make
+script:
+  - make
+  - make install
+  - cd ../install
+  - bin/alienfx
