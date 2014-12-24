@@ -26,14 +26,18 @@ install:
   #- if [ "$CXX" == "clang++" ]; then export CXX="clang++-3.4"; fi
 
 before_script:
-  - mkdir build
-  - mkdir install
-  - cd build
-  - cmake -DCMAKE_INSTALL_PREFIX:PATH=../install ..
+  - mkdir -p ${TRAVIS_BUILD_DIR}/build
+  - mkdir -p ${TRAVIS_BUILD_DIR}/install
+  - cd ${TRAVIS_BUILD_DIR}/build
+  - cmake -DCMAKE_INSTALL_PREFIX:PATH=${TRAVIS_BUILD_DIR}/install ..
+
+env:
+  - PATH=${PATH}:${TRAVIS_BUILD_DIR}/install/bin
+  - LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${TRAVIS_BUILD_DIR}/install/lib
 
 script:
   - env
   - make
   - make install
-  - cd ../install
-  - bin/alienfx
+  - cd ${TRAVIS_BUILD_DIR}/install
+  - alienfx
