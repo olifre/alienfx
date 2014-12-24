@@ -23,7 +23,12 @@ void zoneScan(alienFx::cAlienfx_device& alienfx, int maxZone=32) {
 void printHelp(std::string& execName) {
 	std::cout << std::setw(20) << " " << " alienfx commandline utility" << std::setw(20) << " " << std::endl;
 	std::cout << " " << execName.c_str() << " [options]" << std::endl;
-	std::cout << std::setw(20) << "-h, --help" << "  " << "Show help." << std::endl;
+	std::cout << std::setw(20) << "--reboot   " << "  " << "Reboot light-chip." << std::endl;
+	std::cout << std::setw(20) << "--lightson " << "  " << "Reset chip, execute lights-on." << std::endl;
+	std::cout << std::setw(20) << "--lightsoff" << "  " << "Reset chip, execute lights-off." << std::endl;
+	std::cout << std::setw(20) << "-v         " << "  " << "Increase verbosity (may be specified several times)." << std::endl;
+	std::cout << std::setw(20) << "-q         " << "  " << "Decrease verbosity (may be specified several times)." << std::endl;
+	std::cout << std::setw(20) << "-h, --help " << "  " << "Show usage information." << std::endl;
 }
 
 namespace longParameters {
@@ -35,8 +40,10 @@ namespace longParameters {
 
 int main(int argc, char **argv) {
 	int rebootChip = false;
+	int lightsOn  = false;
+	int lightsOff = false;
 	
-	unsigned int verbosity = 2;
+	unsigned int verbosity = 1;
 	{
 		// *********************
 		// * PARAMETER PARSING *
@@ -49,6 +56,8 @@ int main(int argc, char **argv) {
 
 		const struct option long_options[] = {
 			{"reboot",        no_argument,         &rebootChip, true},
+			{"lightson",      no_argument,         &lightsOn,   true},
+			{"lightsoff",     no_argument,         &lightsOff,  true},
 			{"help",          no_argument,         NULL,        longParameters::HELP},
 			{0,               0,                   0,           longParameters::NONE}
 		};
@@ -82,37 +91,56 @@ int main(int argc, char **argv) {
 			exit(0);			
 		}
 	}
-	alienFx::cAlienfx_device alienfx(3);
+	alienFx::cAlienfx_device alienfx(verbosity);
 	bool chipFound = alienfx.Init();
 	if (!chipFound) {
 		std::cerr << "Did not find a supported alienfx chip!" << std::endl;
 		return 1;
 	}
-	std::cout << "Turning lights off..." << std::endl;
+
+	if (rebootChip == true) {
+		alienfx.RebootChip();
+	}
+
+	if (lightsOn == true) {
+		if (verbosity > 1) {
+			std::cout << "Turning lights on..." << std::endl;
+		}
+		alienfx.Reset(alienFx::alienFx_resetTypes::ALL_LIGHTS_ON);
+	}
+
+	if (lightsOff == true) {
+		if (verbosity > 1) {
+			std::cout << "Turning lights off..." << std::endl;
+		}
+		alienfx.Reset(alienFx::alienFx_resetTypes::ALL_LIGHTS_OFF);
+	}
+
+	//std::cout << "Turning lights off..." << std::endl;
 	//alienfx.Reset(alienFx::alienFx_resetTypes::ALL_LIGHTS_OFF);
 	//alienfx.RebootChip();
 	//sleep(3);
-	std::cout << "Turning lights on..." << std::endl;
+	//std::cout << "Turning lights on..." << std::endl;
 	//alienfx.Reset(alienFx::alienFx_resetTypes::ALL_LIGHTS_ON);
 
 	//zoneScan(alienfx);
 
-	alienFx::cAlienfx_cmdparser alienfx_parser(&alienfx, 3);
+	alienFx::cAlienfx_cmdparser alienfx_parser(&alienfx, verbosity);
 	//alienfx.SetSpeed(3000);
 	//alienfx_parser.ExecuteCommandString("Z06Z07Z09MF00FF0MFF00F0M0F00FFM0FF00FM00FF0FMF0FF00");
 	//alienfx_parser.ExecuteCommandString("Z00MF00FF0MFF00F0M0F00FFM0FF00FM00FF0FMF0FF00");
-	alienfx_parser.ExecuteCommandString("Z06Z07Z09F222F666");
+	//alienfx_parser.ExecuteCommandString("Z06Z07Z09F222F666");
 	//alienfx_parser.ExecuteCommandString("Z04Z06Z07Z08Z09Z10Z12Z14F111Z01Z02Z03Ffff");
 	//alienfx_parser.ExecuteCommandString("Z12B0F0");
 	//alienfx_parser.ExecuteCommandString("Z00BFFF");	
-
+	/*
 	alienfx.SetSpeed(3);
 	sleep(3);
 	alienfx.SetSpeed(30);
 	sleep(3);
 	alienfx.SetSpeed(300);
 	sleep(3);
-
+	*/
 	/*
 	alienfx.SetColour(alienFx::alienFx_commands::SET_COLOUR_FIXED, 0,
 	                  (1<<0) | (1<<1) | (1<<2) | (1<<3) | (1<<4),
@@ -129,7 +157,7 @@ int main(int argc, char **argv) {
 	                  255, 0, 0);
 	*/
 	//sleep(2);
-	alienfx.RebootChip();
+	//alienfx.RebootChip();
 	return 0;
 }
 
