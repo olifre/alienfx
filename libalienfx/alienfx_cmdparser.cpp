@@ -136,4 +136,6 @@ bool alienFx::cAlienfx_cmdparser::ExecuteCommandString(const std::string& comman
 	}
 	lDevice->EndLoopBlock();
 	lDevice->TransmitExecute();
+
+	return true;
 }
