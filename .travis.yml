@@ -39,4 +39,4 @@ script:
   - make
   - make install
   - cd ${TRAVIS_BUILD_DIR}/install
-  - alienfx
+  - alienfx -h

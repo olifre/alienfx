@@ -18,7 +18,11 @@ void zoneScan(alienFx::cAlienfx_device& alienfx, int maxZone=32) {
 	}
 }
 
-int main() {
+int main(int argc, char **argv) {
+	if (argc>1) {
+		printf("HELP");
+		return 0;
+	}
 	alienFx::cAlienfx_device alienfx(3);
 	bool chipFound = alienfx.Init();
 	if (!chipFound) {
