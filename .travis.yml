@@ -32,8 +32,7 @@ before_script:
   - cmake -DCMAKE_INSTALL_PREFIX:PATH=${TRAVIS_BUILD_DIR}/install ..
 
 env:
-  - PATH=${PATH}:${TRAVIS_BUILD_DIR}/install/bin
-  - LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${TRAVIS_BUILD_DIR}/install/lib
+  - PATH=${PATH}:${TRAVIS_BUILD_DIR}/install/bin LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${TRAVIS_BUILD_DIR}/install/lib
 
 script:
   - env
