@@ -26,6 +26,7 @@ void printHelp(std::string& execName) {
 	std::cout << std::setw(20) << "--reboot   " << "  " << "Reboot light-chip." << std::endl;
 	std::cout << std::setw(20) << "--lightson " << "  " << "Reset chip, execute lights-on." << std::endl;
 	std::cout << std::setw(20) << "--lightsoff" << "  " << "Reset chip, execute lights-off." << std::endl;
+	std::cout << std::setw(20) << "-c <string>" << "  " << "Execute given commandstring." << std::endl;
 	std::cout << std::setw(20) << "-v         " << "  " << "Increase verbosity (may be specified several times)." << std::endl;
 	std::cout << std::setw(20) << "-q         " << "  " << "Decrease verbosity (may be specified several times)." << std::endl;
 	std::cout << std::setw(20) << "-h, --help " << "  " << "Show usage information." << std::endl;
@@ -42,6 +43,9 @@ int main(int argc, char **argv) {
 	int rebootChip = false;
 	int lightsOn  = false;
 	int lightsOff = false;
+
+	std::string commandString("");
+	bool execCommandString = false;
 	
 	unsigned int verbosity = 1;
 	{
@@ -64,7 +68,7 @@ int main(int argc, char **argv) {
 		if (argc > 1) {
 			int opt = 0;
 			int option_index = 0;
-			while ((opt = getopt_long(argc, argv, "hqv", long_options, &option_index)) != -1) {
+			while ((opt = getopt_long(argc, argv, "hc:qv", long_options, &option_index)) != -1) {
 				switch (opt) {
 				case 0:
 					// long option which sets a var, getopt_long does this by itself.
@@ -80,6 +84,11 @@ int main(int argc, char **argv) {
 					break;
 				case 'v':
 					verbosity++;
+					break;
+				case 'c':
+					//FIXME: Validate.
+					commandString = optarg;
+					execCommandString = true;
 					break;
 				default:
 					printHelp(execName);
@@ -116,6 +125,9 @@ int main(int argc, char **argv) {
 		alienfx.Reset(alienFx::alienFx_resetTypes::ALL_LIGHTS_OFF);
 	}
 
+	if (execCommandString) {
+		alienFx::cAlienfx_utils::ExecuteCommandString(&alienfx, commandString, verbosity);
+	}
 	//std::cout << "Turning lights off..." << std::endl;
 	//alienfx.Reset(alienFx::alienFx_resetTypes::ALL_LIGHTS_OFF);
 	//alienfx.RebootChip();
