@@ -26,6 +26,7 @@ void printHelp(std::string& execName) {
 	std::cout << std::setw(20) << "--reboot   " << "  " << "Reboot light-chip." << std::endl;
 	std::cout << std::setw(20) << "--lightson " << "  " << "Reset chip, execute lights-on." << std::endl;
 	std::cout << std::setw(20) << "--lightsoff" << "  " << "Reset chip, execute lights-off." << std::endl;
+	std::cout << std::setw(20) << "-s <int>   " << "  " << "Set speed to given value (integer)." << std::endl;
 	std::cout << std::setw(20) << "-c <string>" << "  " << "Execute given commandstring." << std::endl;
 	std::cout << std::setw(20) << "-v         " << "  " << "Increase verbosity (may be specified several times)." << std::endl;
 	std::cout << std::setw(20) << "-q         " << "  " << "Decrease verbosity (may be specified several times)." << std::endl;
@@ -46,6 +47,9 @@ int main(int argc, char **argv) {
 
 	std::string commandString("");
 	bool execCommandString = false;
+
+	int speed = 300;
+	bool setSpeed = false;
 	
 	unsigned int verbosity = 1;
 	{
@@ -68,7 +72,7 @@ int main(int argc, char **argv) {
 		if (argc > 1) {
 			int opt = 0;
 			int option_index = 0;
-			while ((opt = getopt_long(argc, argv, "hc:qv", long_options, &option_index)) != -1) {
+			while ((opt = getopt_long(argc, argv, "hc:s:qv", long_options, &option_index)) != -1) {
 				switch (opt) {
 				case 0:
 					// long option which sets a var, getopt_long does this by itself.
@@ -89,6 +93,16 @@ int main(int argc, char **argv) {
 					//FIXME: Validate.
 					commandString = optarg;
 					execCommandString = true;
+					break;
+				case 's':
+					//FIXME: Validate.
+					speed = strtoul(optarg, &endptr, 10);
+					if (errno == ERANGE) {
+						perror("strtoul");
+						printHelp(execName);
+						exit(1);
+					}
+					setSpeed = true;
 					break;
 				default:
 					printHelp(execName);
@@ -125,6 +139,10 @@ int main(int argc, char **argv) {
 		alienfx.Reset(alienFx::alienFx_resetTypes::ALL_LIGHTS_OFF);
 	}
 
+	if (setSpeed) {
+		alienfx.SetSpeed(speed);
+	}
+	
 	if (execCommandString) {
 		alienFx::cAlienfx_utils::ExecuteCommandString(&alienfx, commandString, verbosity);
 	}
