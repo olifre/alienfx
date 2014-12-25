@@ -5,7 +5,7 @@
 #include "alienfxdev/include/alienfx_device.h"
 #include "alienfxdev/include/alienfx_commands.h"
 
-#include "alienfxdev/include/alienfx_cmdparser.h"
+#include "alienfxdev/include/alienfx_utils.h"
 
 void zoneScan(alienFx::cAlienfx_device& alienfx, int maxZone=32) {
 	for (int zone=0; zone<maxZone; zone++) {
@@ -125,7 +125,7 @@ int main(int argc, char **argv) {
 
 	//zoneScan(alienfx);
 
-	alienFx::cAlienfx_cmdparser alienfx_parser(&alienfx, verbosity);
+	//alienFx::cAlienfx_cmdparser alienfx_parser(&alienfx, verbosity);
 	//alienfx.SetSpeed(3000);
 	//alienfx_parser.ExecuteCommandString("Z06Z07Z09MF00FF0MFF00F0M0F00FFM0FF00FM00FF0FMF0FF00");
 	//alienfx_parser.ExecuteCommandString("Z00MF00FF0MFF00F0M0F00FFM0FF00FM00FF0FMF0FF00");
