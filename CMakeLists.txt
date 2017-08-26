@@ -2,6 +2,8 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 PROJECT(ALIENFX)
 SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
+include(GNUInstallDirs)
+
 FIND_PACKAGE(libusb-1.0 REQUIRED)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Woverloaded-virtual -Wshadow -Wextra")
